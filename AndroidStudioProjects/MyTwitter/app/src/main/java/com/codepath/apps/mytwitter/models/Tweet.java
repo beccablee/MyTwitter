@@ -16,6 +16,7 @@ public class Tweet {
     private long uid;
     private String createdAt;
     private User user;
+    private String relativeDate;
 
     public Tweet() {
     }
@@ -24,7 +25,7 @@ public class Tweet {
         return body;
     }
 
-    public long getId() {
+    public long getUid() {
         return uid;
     }
 
@@ -36,9 +37,13 @@ public class Tweet {
         return user;
     }
 
+    public String getRelativeDate() {
+        return relativeDate;
+    }
+
     // Deserialize JSON and build tweet objects
     // com.codepath.apps.mytwitter.models.Tweet.fromJSON("(..)") -> com.codepath.apps.mytwitter.models.Tweet
-
+ 
     public static Tweet fromJSON(JSONObject jsonObject){
         Tweet tweet = new Tweet();
         try {
