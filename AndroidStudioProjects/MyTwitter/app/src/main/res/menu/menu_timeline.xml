@@ -11,4 +11,12 @@
         android:title="Profile"
         android:onClick="onProfileView"></item>
 
+    <item
+        android:id="@id/postTweet"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_post"
+        android:title="Post"
+        android:onClick="postTweet"></item>
+
+
 </menu>

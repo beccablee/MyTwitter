@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="miProfile" type="id">mi_profile</item>
+    <item name="postTweet" type="id">post_tweet</item>
     <item name="llCounts" type="id">llcounts</item>
 </resources>

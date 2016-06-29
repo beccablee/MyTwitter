@@ -8,5 +8,6 @@
     <string name="tag_line">Tag Line</string>
     <string name="_5_followers">5 Followers</string>
     <string name="_5_following">5 Following</string>
+    <string name="title_activity_post">PostActivity</string>
 
 </resources>

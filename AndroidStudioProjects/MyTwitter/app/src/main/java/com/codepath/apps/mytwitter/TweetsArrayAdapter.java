@@ -33,11 +33,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
         TextView tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
         TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+        TextView tvTime = (TextView) convertView.findViewById(R.id.tvTime);
 
         User user = tweet.getUser();
         String screenName = user.getScreenName();
         tvUsername.setText(screenName);
         tvBody.setText(tweet.getBody());
+        tvTime.setText(tweet.getRelativeDate());
         ivProfileImage.setImageResource(android.R.color.transparent);
 
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
