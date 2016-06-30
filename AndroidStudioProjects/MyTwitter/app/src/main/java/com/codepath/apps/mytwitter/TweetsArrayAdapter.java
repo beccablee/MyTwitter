@@ -1,6 +1,7 @@
 package com.codepath.apps.mytwitter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,13 @@ import java.util.List;
 // takes tweet objects and turns them into Views
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
+    ImageView ivProfileImage;
+    TextView tvUsername;
+    TextView tvBody;
+    TextView tvTime;
+    User user;
+    String screenName;
+
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, 0, tweets);
     }
@@ -30,20 +38,42 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet,parent,false);
         }
-        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-        TextView tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
-        TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
-        TextView tvTime = (TextView) convertView.findViewById(R.id.tvTime);
 
-        User user = tweet.getUser();
-        String screenName = user.getScreenName();
+        tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
+        tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+        tvTime = (TextView) convertView.findViewById(R.id.tvTime);
+        ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
+
+        user = tweet.getUser();
+        screenName = user.getScreenName();
+
         tvUsername.setText(screenName);
         tvBody.setText(tweet.getBody());
         tvTime.setText(tweet.getRelativeDate());
         ivProfileImage.setImageResource(android.R.color.transparent);
 
+        ivProfileImage.setTag(user.getScreenName());
+
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+
+        setupOnClickListener();
 
         return convertView;
     }
+
+    public void setupOnClickListener(){
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), ProfileActivity.class);
+                String screen_name = v.getTag().toString();
+                i.putExtra("screen_name", screen_name);
+                getContext().startActivity(i);
+            }
+        });
+    }
+
+
+
+
 }
