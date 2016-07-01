@@ -24,6 +24,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient(); // Singleton client
         populateTimeline();
+
     }
 
     // Send an API request to get the timeline JSON

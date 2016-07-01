@@ -14,6 +14,7 @@ public class User implements Serializable{
     private long uid;
     private String screenName;
     private String profileImageUrl;
+    private String profileBannerUrl;
     private String tagline;
     private String followersCount;
     private String followingsCount;
@@ -35,6 +36,10 @@ public class User implements Serializable{
         return profileImageUrl;
     }
 
+    public String getProfileBannerUrl() {
+        return profileBannerUrl;
+    }
+
     public String getTagline() {
         return tagline;
     }
@@ -54,6 +59,7 @@ public class User implements Serializable{
             u.uid = json.getLong("id");
             u.screenName = json.getString("screen_name");
             u.profileImageUrl = json.getString("profile_image_url");
+            u.profileBannerUrl = json.getString("profile_banner_url");
             u.tagline = json.getString("description");
             u.followersCount = json.getString("followers_count");
             u.followingsCount = json.getString("friends_count");

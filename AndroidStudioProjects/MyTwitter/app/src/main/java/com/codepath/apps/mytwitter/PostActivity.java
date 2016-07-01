@@ -38,12 +38,16 @@ public class PostActivity extends AppCompatActivity {
     int counter = 140;
     String characters = "" + counter;
 
+    String screen_name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        screen_name = getIntent().getStringExtra("screen_name");
 
         client = TwitterApplication.getRestClient();
         client.getUserInfo(null, new JsonHttpResponseHandler() {
@@ -58,6 +62,10 @@ public class PostActivity extends AppCompatActivity {
 
     private void setupViews() {
         etPost = (EditText) findViewById(R.id.etPost);
+        if (screen_name != null){
+            etPost.setText("@" + screen_name + " ");
+            etPost.setSelection(etPost.length());
+        }
         btnTweet = (Button) findViewById(R.id.btnTweet);
 
         tvCharacterCount = (TextView) findViewById(R.id.tvCharacterCount);
@@ -75,7 +83,6 @@ public class PostActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Fires right before text is changing
             }
             @Override
             public void afterTextChanged(Editable s) {

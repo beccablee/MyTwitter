@@ -32,6 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+
         screenName = getIntent().getStringExtra("screen_name");
 
         ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
@@ -69,11 +70,13 @@ public class ProfileActivity extends AppCompatActivity {
         TextView tvFollowers = (TextView) findViewById(R.id.tvFollowers);
         TextView tvFollowing = (TextView) findViewById(R.id.tvFollowing);
         ImageView ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
+        ImageView ivHeaderImage = (ImageView) findViewById(R.id.ivHeaderImage);
         tvName.setText(user.getName());
         tvTagLine.setText(user.getTagline());
         tvFollowers.setText(user.getFollowersCount() + " Followers");
         tvFollowing.setText(user.getFollowingsCount() + " Following");
         Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfileImage);
+        Picasso.with(this).load(user.getProfileBannerUrl()).into(ivHeaderImage);
     }
 
     public class TweetsPagerAdapter extends FragmentPagerAdapter {

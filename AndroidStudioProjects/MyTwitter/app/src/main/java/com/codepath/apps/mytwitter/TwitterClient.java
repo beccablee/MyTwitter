@@ -71,10 +71,10 @@ public class TwitterClient extends OAuthBaseClient {
     }
     
     public void getUserInfo(String username, AsyncHttpResponseHandler handler){
-        if (username == null) {
+        if (username == null) { // Personal user
             String apiUrl = getApiUrl("account/verify_credentials.json");
             getClient().get(apiUrl, null, handler);
-        } else {
+        } else { // Other users
             String apiUrl = getApiUrl("users/show.json");
             RequestParams params = new RequestParams();
             params.put("screen_name", username);
@@ -95,6 +95,20 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("count", 25);
         params.put("q", query);
         getClient().get(apiUrl, params, handler);
+    }
+    
+    public void favorite(long id, AsyncHttpResponseHandler handler){
+        String apiUrl = getApiUrl("favorites/create.json");
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        getClient().post(apiUrl, params, handler);
+    }
+    
+    public void unfavorite(long id, AsyncHttpResponseHandler handler){
+        String apiUrl = getApiUrl("favorites/destroy.json");
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        getClient().post(apiUrl, params, handler);
     }
     
 

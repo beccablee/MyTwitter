@@ -27,7 +27,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="Text Body"
         android:id="@+id/tvBody"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
@@ -45,5 +45,39 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:id="@+id/btnReply"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignLeft="@+id/tvBody"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="30dp"
+        android:paddingTop="8dp"
+        android:background="@drawable/replied"/>
+
+    <Button
+        android:layout_width="15dp"
+        android:layout_height="14dp"
+        android:id="@+id/btnRetweet"
+        android:layout_alignTop="@+id/btnReply"
+        android:layout_toRightOf="@+id/btnReply"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:paddingTop="8dp"
+        android:background="@drawable/retweet"/>
+
+    <Button
+        android:layout_width="13dp"
+        android:layout_height="17dp"
+        android:id="@+id/btnFav"
+        android:layout_alignTop="@+id/btnRetweet"
+        android:layout_toRightOf="@+id/btnRetweet"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:paddingTop="8dp"
+        android:background="@drawable/no_fav"/>
 
 </RelativeLayout>

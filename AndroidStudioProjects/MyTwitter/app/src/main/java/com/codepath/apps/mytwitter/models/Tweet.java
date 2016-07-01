@@ -29,6 +29,8 @@ public class Tweet implements Serializable{
     private String createdAt;
     private User user;
     private String relativeDate;
+    Boolean isRetweeted;
+    Boolean isFavorited;
 
     public Tweet() {
     }
@@ -53,6 +55,14 @@ public class Tweet implements Serializable{
         return relativeDate;
     }
 
+    public Boolean getRetweeted() {
+        return isRetweeted;
+    }
+
+    public Boolean getFavorited() {
+        return isFavorited;
+    }
+
     // Deserialize JSON and build tweet objects
     // com.codepath.apps.mytwitter.models.Tweet.fromJSON("(..)") -> com.codepath.apps.mytwitter.models.Tweet
 
@@ -63,6 +73,8 @@ public class Tweet implements Serializable{
             tweet.uid = jsonObject.getLong("id");
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+            tweet.isFavorited = jsonObject.getBoolean("favorited");
+            tweet.isRetweeted = jsonObject.getBoolean("retweeted");
             try {
                 tweet.relativeDate = getRelativeTimeAgo(tweet.createdAt);
             } catch (java.text.ParseException e) {
