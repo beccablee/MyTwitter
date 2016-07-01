@@ -34,8 +34,7 @@ public class MentionsTimelineFragment extends TweetsListFragment {
                 // look at JSON
                 // deserialize
                 // create models and add them to the adapter
-                // load model (adapter takes data nad populates into list view)
-                //ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
+                // load model (adapter takes data and populates into list view)
                 addAll(Tweet.fromJSONArray(json));
             }
 

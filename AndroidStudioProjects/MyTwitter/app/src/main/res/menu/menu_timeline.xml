@@ -6,17 +6,25 @@
 
     <item
         android:id="@id/miProfile"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/ic_profile"
-        android:title="Profile"
-        android:onClick="onProfileView"></item>
+        android:title="@string/profile"
+        android:onClick="onProfileView"/>
 
     <item
         android:id="@id/postTweet"
         app:showAsAction="always"
         android:icon="@drawable/ic_post"
-        android:title="Post"
-        android:onClick="postTweet"></item>
+        android:title="@string/post"
+        android:onClick="postTweet"/>
+
+
+    <item android:id="@+id/action_search"
+        android:orderInCategory="5"
+        android:title="@string/search"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
 
 
 </menu>

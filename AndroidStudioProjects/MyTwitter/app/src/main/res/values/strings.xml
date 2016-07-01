@@ -9,5 +9,8 @@
     <string name="_5_followers">5 Followers</string>
     <string name="_5_following">5 Following</string>
     <string name="title_activity_post">PostActivity</string>
+    <string name="post">Post</string>
+    <string name="search">Search</string>
+    <string name="profile">Profile</string>
 
 </resources>

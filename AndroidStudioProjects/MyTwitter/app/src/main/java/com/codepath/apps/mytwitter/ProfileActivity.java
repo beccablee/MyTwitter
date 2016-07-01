@@ -27,9 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        if (getIntent().getStringExtra("screen_name") != null){
-            screenName = getIntent().getStringExtra("screen_name");
-        }
+        screenName = getIntent().getStringExtra("screen_name");
 
         client = TwitterApplication.getRestClient();
         client.getUserInfo(screenName, new JsonHttpResponseHandler() {
@@ -73,8 +71,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
 }

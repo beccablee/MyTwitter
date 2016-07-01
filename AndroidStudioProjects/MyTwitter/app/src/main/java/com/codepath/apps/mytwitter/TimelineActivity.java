@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +25,8 @@ public class TimelineActivity extends AppCompatActivity {
     HomeTimelineFragment home;
     MentionsTimelineFragment mentions;
     Tweet tweet;
+    TwitterClient client;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +34,22 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timeline);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         home = new HomeTimelineFragment();
         mentions = new MentionsTimelineFragment();
+        client = TwitterApplication.getRestClient();
 
-        // Get viewpager, set, find sliding tabstrip, attach tabstrip to viewpager
         ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
         vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabStrip.setViewPager(vpPager);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
+        setupSearch(menu);
         return true;
     }
 
@@ -50,6 +57,32 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setupSearch(Menu menu) {
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                onTweetSearch(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        searchItem.expandActionView();
+        searchView.requestFocus();
+    }
+
+    private void onTweetSearch(final String query) {
+        Intent i = new Intent(TimelineActivity.this, SearchActivity.class);
+        i.putExtra("query", query);
+        startActivity(i);
     }
 
     public void onProfileView(MenuItem mi){
@@ -79,7 +112,6 @@ public class TimelineActivity extends AppCompatActivity {
             super(fm);
         }
 
-        // Controls order and createion of fragments
         @Override
         public Fragment getItem(int position) {
             if (position == 0){
@@ -89,15 +121,12 @@ public class TimelineActivity extends AppCompatActivity {
             } else {
                 return null;
             }
-
         }
 
-        // Return tab title
         @Override
         public CharSequence getPageTitle(int position) {
             return tabTitles[position];
         }
-        // Number of fragments
         @Override
         public int getCount() {
             return tabTitles.length;

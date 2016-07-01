@@ -1,13 +1,17 @@
 package com.codepath.apps.mytwitter;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.mytwitter.models.Tweet;
@@ -20,13 +24,19 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 public class PostActivity extends AppCompatActivity {
+
     TwitterClient client;
     User user;
-    String post;
-    EditText etPost;
     Tweet tweet;
+    String post;
+
+    EditText etPost;
     ImageView ivProfileImage;
     Button btnTweet;
+
+    TextView tvCharacterCount;
+    int counter = 140;
+    String characters = "" + counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +51,7 @@ public class PostActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 user = User.fromJSON(response);
                 setupViews();
+                setCharacterCountListener();
             }
         });
     }
@@ -48,26 +59,64 @@ public class PostActivity extends AppCompatActivity {
     private void setupViews() {
         etPost = (EditText) findViewById(R.id.etPost);
         btnTweet = (Button) findViewById(R.id.btnTweet);
+
+        tvCharacterCount = (TextView) findViewById(R.id.tvCharacterCount);
+        tvCharacterCount.setText(characters);
+        tvCharacterCount.setTextColor(Color.parseColor("#CCCCCC"));
+
         ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
         Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfileImage);
     }
 
-    public void onTweet(View view){
-        post = etPost.getText().toString();
-        Toast.makeText(getApplicationContext(), "clicked!", Toast.LENGTH_SHORT).show();
-        client.postTweet(post, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-                //Toast.makeText(getApplicationContext(), "success!", Toast.LENGTH_SHORT).show();
 
-                tweet = Tweet.fromJSON(json);
-                submitTweet(tweet);
+    private void setCharacterCountListener() {
+        etPost.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Fires right before text is changing
             }
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject responseString) {
-                //Log.d("DEBUG", "");
+            public void afterTextChanged(Editable s) {
+                counter = 140 - s.length();
+                characters = "" + counter;
+                tvCharacterCount.setText(characters);
+                adjustColors();
             }
         });
+    }
+
+    private void adjustColors(){
+        if (counter > 19) {
+            tvCharacterCount.setTextColor(Color.parseColor("#CCCCCC")); // Light grey text
+        } else {
+            tvCharacterCount.setTextColor(Color.parseColor("#DD1111")); // Red text
+            if (counter < 0){
+                btnTweet.setBackgroundColor(Color.parseColor("#EEEEEE")); // White button, looks deactivated
+            } else {
+                btnTweet.setBackgroundColor(Color.parseColor("#55ACEE")); // "Twitter blue" button
+            }
+        }
+    }
+
+    public void onTweet(View view){
+        post = etPost.getText().toString();
+        if (counter < 0 || counter == 140) {
+            Toast.makeText(getApplicationContext(), "Too many characters!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            client.postTweet(post, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                    tweet = Tweet.fromJSON(json);
+                    submitTweet(tweet);
+                }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject responseString) {
+                }
+            });
+        }
     }
 
     private void submitTweet(Tweet tweet){

@@ -64,6 +64,11 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("screen_name", screenName);
         getClient().get(apiUrl, params, handler);
     }
+
+    public void getLikesTimeline(AsyncHttpResponseHandler handler){
+        String apiUrl = getApiUrl("favorites/list.json");
+        getClient().get(apiUrl, null, handler);
+    }
     
     public void getUserInfo(String username, AsyncHttpResponseHandler handler){
         if (username == null) {
@@ -82,6 +87,14 @@ public class TwitterClient extends OAuthBaseClient {
         RequestParams params = new RequestParams();
         params.put("status", body);
         getClient().post(apiUrl, params, handler);
+    }
+    
+    public void searchTweets(String query, AsyncHttpResponseHandler handler){
+        String apiUrl = getApiUrl("search/tweets.json");
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        params.put("q", query);
+        getClient().get(apiUrl, params, handler);
     }
     
 

@@ -6,7 +6,11 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.codepath.apps.mytwitter.PostActivity"
-    tools:showIn="@layout/activity_post">
+    tools:showIn="@layout/activity_post"
+    android:paddingRight="8dp"
+    android:paddingLeft="8dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <ImageView
         android:layout_width="40dp"
@@ -36,5 +40,16 @@
         android:background="#55acee"
         android:textColor="#ffffff"
         android:onClick="onTweet" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Character Count"
+        android:id="@+id/tvCharacterCount"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/btnTweet"
+        android:layout_toStartOf="@+id/btnTweet"
+        android:paddingRight="16dp" />
 
 </RelativeLayout>
