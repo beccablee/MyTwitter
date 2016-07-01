@@ -4,5 +4,6 @@
     <item name="postTweet" type="id">post_tweet</item>
     <item name="llCounts" type="id">llcounts</item>
     <item type="id" name="tweetId"/>
+        <item type="id" name="favorited"/>
         <item type="id" name="retweeted"/>
 </resources>

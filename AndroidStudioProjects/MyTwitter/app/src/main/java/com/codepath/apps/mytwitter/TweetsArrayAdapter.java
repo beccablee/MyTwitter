@@ -70,8 +70,9 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         ivProfileImage.setTag(user.getScreenName());
         btnReply.setTag(user.getScreenName());
         btnFav.setTag(R.id.tweetId, tweet.getUid());
-        btnFav.setTag(R.id.retweeted, tweet.getFavorited());
-        //Log.d("DEBUG", "" + tweet.getFavorited());
+        btnFav.setTag(R.id.favorited, tweet.getFavorited());
+        btnRetweet.setTag(R.id.tweetId, tweet.getUid());
+        btnRetweet.setTag(R.id.retweeted, tweet.getRetweeted());
 
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
 
@@ -116,20 +117,37 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         });
         btnRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(final View v) {
+                Long id = Long.parseLong(v.getTag(R.id.tweetId).toString());
+                if (!(Boolean)v.getTag(R.id.retweeted)) {
+                    client.retweet(id, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            v.setBackgroundResource(R.drawable.retweeted);
+                            v.setTag(R.id.retweeted, true);
+                        }
+                    });
+                } else {
+                    client.unRetweet(id, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            v.setBackgroundResource(R.drawable.retweet);
+                            v.setTag(R.id.retweeted, false);
+                        }
+                    });
+                }
             }
         });
         btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 Long id = Long.parseLong(v.getTag(R.id.tweetId).toString());
-                if (!(Boolean)v.getTag(R.id.retweeted)) {
+                if (!(Boolean)v.getTag(R.id.favorited)) {
                     client.favorite(id, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             v.setBackgroundResource(R.drawable.fav);
-                            v.setTag(R.id.retweeted, true);
+                            v.setTag(R.id.favorited, true);
                         }
                     });
                 } else {
@@ -137,7 +155,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             v.setBackgroundResource(R.drawable.no_fav);
-                            v.setTag(R.id.retweeted, false);
+                            v.setTag(R.id.favorited, false);
                         }
                     });
                 }
