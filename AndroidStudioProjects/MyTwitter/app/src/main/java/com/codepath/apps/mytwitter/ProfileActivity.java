@@ -1,13 +1,18 @@
 package com.codepath.apps.mytwitter;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.astuetz.PagerSlidingTabStrip;
+import com.codepath.apps.mytwitter.fragments.LikesTimelineFragment;
 import com.codepath.apps.mytwitter.fragments.UserTimelineFragment;
 import com.codepath.apps.mytwitter.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -29,6 +34,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         screenName = getIntent().getStringExtra("screen_name");
 
+        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabStrip.setViewPager(vpPager);
+
         client = TwitterApplication.getRestClient();
         client.getUserInfo(screenName, new JsonHttpResponseHandler() {
             @Override
@@ -42,13 +52,15 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        if (savedInstanceState == null) {
+
+        /*if (savedInstanceState == null) {
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
             // Dynamically display fragment with container
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContainer, fragmentUserTimeline);
             ft.commit();
-        }
+        }*/
+
     }
 
     private void populateProfileHeader(User user) {
@@ -62,6 +74,35 @@ public class ProfileActivity extends AppCompatActivity {
         tvFollowers.setText(user.getFollowersCount() + " Followers");
         tvFollowing.setText(user.getFollowingsCount() + " Following");
         Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfileImage);
+    }
+
+    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+        final int PAGE_COUNT = 2;
+        private String tabTitles[] = {"Tweets", "Likes"};
+
+        public TweetsPagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0){
+                return UserTimelineFragment.newInstance(screenName);
+            } else if (position == 1) {
+                return new LikesTimelineFragment();
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
     }
 
     @Override

@@ -112,6 +112,7 @@ public class TimelineActivity extends AppCompatActivity {
             super(fm);
         }
 
+        // Controls order and creation of fragments
         @Override
         public Fragment getItem(int position) {
             if (position == 0){
