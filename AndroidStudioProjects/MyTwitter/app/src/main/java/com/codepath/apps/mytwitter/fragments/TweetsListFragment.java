@@ -39,7 +39,7 @@ public class TweetsListFragment extends Fragment {
     private TweetsArrayAdapter aTweets;
 
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
-    //@BindView(R.id.lvTweets) ListView lvTweets;
+    @BindView(R.id.lvTweets) ListView lvTweets;
     TwitterClient client;
     private Unbinder unbinder;
 
@@ -47,8 +47,9 @@ public class TweetsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tweets_list, container, false);
-        ListView lvTweets;
-        lvTweets = (ListView) v.findViewById(R.id.lvTweets);
+        unbinder = ButterKnife.bind(this, v);
+        //ListView lvTweets;
+        //lvTweets = (ListView) v.findViewById(R.id.lvTweets);
         lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
@@ -60,7 +61,6 @@ public class TweetsListFragment extends Fragment {
         });
         lvTweets.setAdapter(aTweets);
         client = TwitterApplication.getRestClient();
-        unbinder = ButterKnife.bind(this, v);
         setSwipeContainer();
 
         return v;

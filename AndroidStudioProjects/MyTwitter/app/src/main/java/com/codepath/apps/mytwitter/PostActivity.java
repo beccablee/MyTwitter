@@ -46,7 +46,6 @@ public class PostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         screen_name = getIntent().getStringExtra("screen_name");
 

@@ -31,8 +31,9 @@ public class Tweet implements Serializable{
     private String relativeDate;
     Boolean isRetweeted;
     Boolean isFavorited;
-    int favoritesCount;
-    int retweetsCount;
+    public int favoritesCount;
+    public int retweetsCount;
+    private String mediaUrl;
 
     public Tweet() {
     }
@@ -73,6 +74,10 @@ public class Tweet implements Serializable{
         return retweetsCount;
     }
 
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
     public static Tweet fromJSON(JSONObject jsonObject){
         Tweet tweet = new Tweet();
         try {
@@ -84,6 +89,8 @@ public class Tweet implements Serializable{
             tweet.isRetweeted = jsonObject.getBoolean("retweeted");
             tweet.favoritesCount = jsonObject.getInt("favorite_count");
             tweet.retweetsCount = jsonObject.getInt("retweet_count");
+            JSONArray media = jsonObject.getJSONObject("entities").getJSONArray("media");
+            tweet.mediaUrl = media.getJSONObject(0).getString("media_url");
             try {
                 tweet.relativeDate = getRelativeTimeAgo(tweet.createdAt);
             } catch (java.text.ParseException e) {

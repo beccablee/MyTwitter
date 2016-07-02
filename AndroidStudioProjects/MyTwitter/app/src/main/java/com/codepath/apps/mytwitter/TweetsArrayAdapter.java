@@ -47,6 +47,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         @BindView(R.id.btnFav) Button btnFav;
         @BindView(R.id.tvRetweets) TextView tvRetweets;
         @BindView(R.id.tvFavs) TextView tvFavs;
+        @BindView(R.id.ivMedia) ImageView ivMedia;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -85,6 +86,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.tvFavs.setText(favsCount);
         viewHolder.tvRetweets.setText(retweetsCount);
 
+        if (tweet.getMediaUrl() != null){
+            viewHolder.ivMedia.setVisibility(View.VISIBLE);
+            Picasso.with(getContext()).load(tweet.getMediaUrl()).into(viewHolder.ivMedia);
+        } else {
+            viewHolder.ivMedia.setVisibility(View.GONE);
+        }
+
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
         viewHolder.ivProfileImage.setTag(user.getScreenName());
         viewHolder.btnReply.setTag(user.getScreenName());
@@ -117,7 +125,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     }
 
 
-    public void setupOnClickListeners(ViewHolder viewHolder){
+    public void setupOnClickListeners(final ViewHolder viewHolder){
         viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,6 +177,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             v.setBackgroundResource(R.drawable.fav);
                             v.setTag(R.id.favorited, true);
+
                         }
                     });
                 } else {
