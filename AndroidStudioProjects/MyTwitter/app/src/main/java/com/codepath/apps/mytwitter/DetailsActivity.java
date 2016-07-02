@@ -1,11 +1,11 @@
 package com.codepath.apps.mytwitter;
 
-import android.content.Context;
 import android.content.Intent;
-import android.view.LayoutInflater;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,126 +17,102 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
-/**
- * Created by beccalee on 6/27/16.
- */
-// takes tweet objects and turns them into Views
-public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
+public class DetailsActivity extends AppCompatActivity {
 
-    User user;
     Tweet tweet;
+    User user;
     String screenName;
-
     TwitterClient client;
 
-    static class ViewHolder {
-        @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
-        @BindView(R.id.tvUsername) TextView tvUsername;
-        @BindView(R.id.tvScreenName) TextView tvScreenName;
-        @BindView(R.id.tvBody) TextView tvBody;
-        @BindView(R.id.tvTime) TextView tvTime;
-        @BindView(R.id.btnReply) Button btnReply;
-        @BindView(R.id.btnRetweet) Button btnRetweet;
-        @BindView(R.id.btnFav) Button btnFav;
-        @BindView(R.id.tvRetweets) TextView tvRetweets;
-        @BindView(R.id.tvFavs) TextView tvFavs;
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
-
-
-    public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
-        super(context, R.layout.item_tweet, tweets);
-    }
+    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.tvUsername) TextView tvUsername;
+    @BindView(R.id.tvScreenName) TextView tvScreenName;
+    @BindView(R.id.tvBody) TextView tvBody;
+    @BindView(R.id.tvTime) TextView tvTime;
+    @BindView(R.id.btnReply) Button btnReply;
+    @BindView(R.id.btnRetweet) Button btnRetweet;
+    @BindView(R.id.btnFav) Button btnFav;
+    @BindView(R.id.tvRetweets) TextView tvRetweets;
+    @BindView(R.id.tvFavs) TextView tvFavs;
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        tweet = getItem(position);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_details);
 
+        ButterKnife.bind(this);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+
+        tweet = (Tweet) getIntent().getSerializableExtra("tweet");
         user = tweet.getUser();
         screenName = user.getScreenName();
         client = TwitterApplication.getRestClient();
-        ViewHolder viewHolder;
-
-        if (convertView != null) {
-            viewHolder = (ViewHolder) convertView.getTag();
-        } else {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet,parent,false);
-            viewHolder = new ViewHolder(convertView);
-            convertView.setTag(viewHolder);
-        }
-
         String favsCount = "" + tweet.getFavoritesCount();
         String retweetsCount = "" + tweet.getRetweetsCount();
 
-        viewHolder.tvUsername.setText(user.getName());
-        viewHolder.tvScreenName.setText("@" + screenName);
-        viewHolder.tvBody.setText(tweet.getBody());
-        viewHolder.tvTime.setText(tweet.getRelativeDate());
-        viewHolder.tvFavs.setText(favsCount);
-        viewHolder.tvRetweets.setText(retweetsCount);
+        tvUsername.setText(user.getName());
+        tvScreenName.setText("@" + screenName);
+        tvBody.setText(tweet.getBody());
+        tvTime.setText(tweet.getRelativeDate());
+        tvFavs.setText(favsCount);
+        tvRetweets.setText(retweetsCount);
 
-        viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
-        viewHolder.ivProfileImage.setTag(user.getScreenName());
-        viewHolder.btnReply.setTag(user.getScreenName());
-        viewHolder.btnFav.setTag(R.id.tweetId, tweet.getUid());
-        viewHolder.btnFav.setTag(R.id.favorited, tweet.getFavorited());
-        viewHolder.btnRetweet.setTag(R.id.tweetId, tweet.getUid());
-        viewHolder.btnRetweet.setTag(R.id.retweeted, tweet.getRetweeted());
+        ivProfileImage.setImageResource(android.R.color.transparent);
+        ivProfileImage.setTag(user.getScreenName());
+        btnReply.setTag(user.getScreenName());
+        btnFav.setTag(R.id.tweetId, tweet.getUid());
+        btnFav.setTag(R.id.favorited, tweet.getFavorited());
+        btnRetweet.setTag(R.id.tweetId, tweet.getUid());
+        btnRetweet.setTag(R.id.retweeted, tweet.getRetweeted());
 
-        buttonColors(viewHolder);
+        buttonColors();
 
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).transform(new RoundedCornersTransformation(5, 0)).into(viewHolder.ivProfileImage);
+        Picasso.with(getApplicationContext()).load(tweet.getUser().getProfileImageUrl()).transform(new RoundedCornersTransformation(5, 0)).into(ivProfileImage);
 
-        setupOnClickListeners(viewHolder);
-
-        return convertView;
+        setupOnClickListeners();
     }
 
-    public void buttonColors(ViewHolder viewHolder){
+    public void buttonColors(){
         if (tweet.getRetweeted()){
-            viewHolder.btnRetweet.setBackgroundResource(R.drawable.retweeted);
+            btnRetweet.setBackgroundResource(R.drawable.retweeted);
         } else {
-            viewHolder.btnRetweet.setBackgroundResource(R.drawable.retweet);
+            btnRetweet.setBackgroundResource(R.drawable.retweet);
         }
         if (tweet.getFavorited()){
-            viewHolder.btnFav.setBackgroundResource(R.drawable.fav);
+            btnFav.setBackgroundResource(R.drawable.fav);
         } else {
-            viewHolder.btnFav.setBackgroundResource(R.drawable.no_fav);
+            btnFav.setBackgroundResource(R.drawable.no_fav);
         }
 
     }
 
 
-    public void setupOnClickListeners(ViewHolder viewHolder){
-        viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+    public void setupOnClickListeners(){
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), ProfileActivity.class);
                 String screen_name = v.getTag().toString();
                 i.putExtra("screen_name", screen_name);
-                getContext().startActivity(i);
+                getApplicationContext().startActivity(i);
             }
         });
-        viewHolder.btnReply.setOnClickListener(new View.OnClickListener() {
+        btnReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), PostActivity.class);
                 String screen_name = v.getTag().toString();
                 i.putExtra("screen_name", screen_name);
-                getContext().startActivity(i);
+                getApplicationContext().startActivity(i);
             }
         });
-        viewHolder.btnRetweet.setOnClickListener(new View.OnClickListener() {
+        btnRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 Long id = Long.parseLong(v.getTag(R.id.tweetId).toString());
@@ -159,7 +135,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                 }
             }
         });
-        viewHolder.btnFav.setOnClickListener(new View.OnClickListener() {
+        btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 Long id = Long.parseLong(v.getTag(R.id.tweetId).toString());
@@ -183,9 +159,5 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             }
         });
     }
-
-
-
-
 
 }

@@ -1,5 +1,7 @@
 package com.codepath.apps.mytwitter;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,24 +22,38 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class ProfileActivity extends AppCompatActivity {
     TwitterClient client;
     User user;
     String screenName;
+    @BindView(R.id.viewpager) ViewPager vpPager;
+    @BindView(R.id.tabs) PagerSlidingTabStrip tabStrip;
+
+    @BindView(R.id.tvFullName) TextView tvName;
+    @BindView(R.id.tvScreenName) TextView tvScreeName;
+    @BindView(R.id.tvTagLine) TextView tvTagLine;
+    @BindView(R.id.tvFollowers) TextView tvFollowers;
+    @BindView(R.id.tvFollowing) TextView tvFollowing;
+    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.ivHeaderImage) ImageView ivHeaderImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        ButterKnife.bind(this);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
 
         screenName = getIntent().getStringExtra("screen_name");
 
-        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        //ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
         vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
-        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        //PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabStrip.setViewPager(vpPager);
 
         client = TwitterApplication.getRestClient();
@@ -53,29 +69,15 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
-        /*if (savedInstanceState == null) {
-            UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
-            // Dynamically display fragment with container
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flContainer, fragmentUserTimeline);
-            ft.commit();
-        }*/
-
     }
 
     private void populateProfileHeader(User user) {
-        TextView tvName = (TextView) findViewById(R.id.tvFullName);
-        TextView tvTagLine = (TextView) findViewById(R.id.tvTagLine);
-        TextView tvFollowers = (TextView) findViewById(R.id.tvFollowers);
-        TextView tvFollowing = (TextView) findViewById(R.id.tvFollowing);
-        ImageView ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
-        ImageView ivHeaderImage = (ImageView) findViewById(R.id.ivHeaderImage);
         tvName.setText(user.getName());
+        tvScreeName.setText("@" + user.getScreenName());
         tvTagLine.setText(user.getTagline());
-        tvFollowers.setText(user.getFollowersCount() + " Followers");
-        tvFollowing.setText(user.getFollowingsCount() + " Following");
-        Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfileImage);
+        tvFollowers.setText(user.getFollowersCount() + " FOLLOWERS");
+        tvFollowing.setText(user.getFollowingsCount() + " FOLLOWING");
+        Picasso.with(this).load(user.getProfileImageUrl()).transform(new RoundedCornersTransformation(10, 0)).into(ivProfileImage);
         Picasso.with(this).load(user.getProfileBannerUrl()).into(ivHeaderImage);
     }
 

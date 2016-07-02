@@ -12,12 +12,16 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mytwitter.fragments.HomeTimelineFragment;
 import com.codepath.apps.mytwitter.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mytwitter.models.Tweet;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class TimelineActivity extends AppCompatActivity {
 
@@ -26,22 +30,25 @@ public class TimelineActivity extends AppCompatActivity {
     MentionsTimelineFragment mentions;
     Tweet tweet;
     TwitterClient client;
-
+    @BindView(R.id.viewpager) ViewPager vpPager;
+    @BindView(R.id.tabs) PagerSlidingTabStrip tabStrip;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
         home = new HomeTimelineFragment();
         mentions = new MentionsTimelineFragment();
         client = TwitterApplication.getRestClient();
 
-        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        //ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
         vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
-        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        //PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabStrip.setViewPager(vpPager);
     }
 
@@ -62,6 +69,9 @@ public class TimelineActivity extends AppCompatActivity {
     private void setupSearch(Menu menu) {
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        int searchName = android.support.v7.appcompat.R.id.search_button;
+        ImageView searchIcon = (ImageView) searchView.findViewById(searchName);
+        searchIcon.setImageResource(R.drawable.search_icon);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

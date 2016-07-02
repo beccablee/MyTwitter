@@ -31,10 +31,7 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         client.getMentionsTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                // look at JSON
-                // deserialize
-                // create models and add them to the adapter
-                // load model (adapter takes data and populates into list view)
+
                 addAll(Tweet.fromJSONArray(json));
             }
 

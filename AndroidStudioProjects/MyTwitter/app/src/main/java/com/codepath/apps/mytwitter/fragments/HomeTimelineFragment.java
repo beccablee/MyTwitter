@@ -33,11 +33,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                // look at JSON
-                // deserialize
-                // create models and add them to the adapter
-                // load model (adapter takes data nad populates into list view)
-                //ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
+
                 addAll(Tweet.fromJSONArray(json));
             }
 

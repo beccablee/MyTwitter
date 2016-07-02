@@ -21,6 +21,8 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 public class PostActivity extends AppCompatActivity {
@@ -30,11 +32,11 @@ public class PostActivity extends AppCompatActivity {
     Tweet tweet;
     String post;
 
-    EditText etPost;
-    ImageView ivProfileImage;
-    Button btnTweet;
-
-    TextView tvCharacterCount;
+    @BindView(R.id.etPost) EditText etPost;
+    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.btnTweet) Button btnTweet;
+    @BindView(R.id.tvCharacterCount) TextView tvCharacterCount;
+    @BindView(R.id.toolbar) Toolbar toolbar;
     int counter = 140;
     String characters = "" + counter;
 
@@ -44,8 +46,7 @@ public class PostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         screen_name = getIntent().getStringExtra("screen_name");
 
@@ -61,18 +62,16 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void setupViews() {
-        etPost = (EditText) findViewById(R.id.etPost);
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
         if (screen_name != null){
             etPost.setText("@" + screen_name + " ");
             etPost.setSelection(etPost.length());
         }
-        btnTweet = (Button) findViewById(R.id.btnTweet);
 
-        tvCharacterCount = (TextView) findViewById(R.id.tvCharacterCount);
         tvCharacterCount.setText(characters);
         tvCharacterCount.setTextColor(Color.parseColor("#CCCCCC"));
 
-        ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
         Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfileImage);
     }
 

@@ -1,5 +1,6 @@
 package com.codepath.apps.mytwitter.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.codepath.apps.mytwitter.DetailsActivity;
 import com.codepath.apps.mytwitter.R;
 import com.codepath.apps.mytwitter.TweetsArrayAdapter;
 import com.codepath.apps.mytwitter.TwitterApplication;
@@ -22,6 +25,9 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -31,19 +37,30 @@ public class TweetsListFragment extends Fragment {
 
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
-    private ListView lvTweets;
-    SwipeRefreshLayout swipeContainer;
+
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
+    //@BindView(R.id.lvTweets) ListView lvTweets;
     TwitterClient client;
+    private Unbinder unbinder;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tweets_list, container, false);
+        ListView lvTweets;
         lvTweets = (ListView) v.findViewById(R.id.lvTweets);
+        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                Tweet tweet = tweets.get(pos);
+                intent.putExtra("tweet", tweet);
+                startActivity(intent);
+            }
+        });
         lvTweets.setAdapter(aTweets);
-        swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
         client = TwitterApplication.getRestClient();
-
+        unbinder = ButterKnife.bind(this, v);
         setSwipeContainer();
 
         return v;
@@ -54,6 +71,11 @@ public class TweetsListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         tweets = new ArrayList<>();
         aTweets = new TweetsArrayAdapter(getActivity(),tweets);
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void setSwipeContainer() {

@@ -31,6 +31,8 @@ public class Tweet implements Serializable{
     private String relativeDate;
     Boolean isRetweeted;
     Boolean isFavorited;
+    int favoritesCount;
+    int retweetsCount;
 
     public Tweet() {
     }
@@ -63,8 +65,13 @@ public class Tweet implements Serializable{
         return isFavorited;
     }
 
-    // Deserialize JSON and build tweet objects
-    // com.codepath.apps.mytwitter.models.Tweet.fromJSON("(..)") -> com.codepath.apps.mytwitter.models.Tweet
+    public int getFavoritesCount() {
+        return favoritesCount;
+    }
+
+    public int getRetweetsCount() {
+        return retweetsCount;
+    }
 
     public static Tweet fromJSON(JSONObject jsonObject){
         Tweet tweet = new Tweet();
@@ -75,6 +82,8 @@ public class Tweet implements Serializable{
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
             tweet.isFavorited = jsonObject.getBoolean("favorited");
             tweet.isRetweeted = jsonObject.getBoolean("retweeted");
+            tweet.favoritesCount = jsonObject.getInt("favorite_count");
+            tweet.retweetsCount = jsonObject.getInt("retweet_count");
             try {
                 tweet.relativeDate = getRelativeTimeAgo(tweet.createdAt);
             } catch (java.text.ParseException e) {

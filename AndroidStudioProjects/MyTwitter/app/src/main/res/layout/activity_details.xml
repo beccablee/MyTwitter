@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:descendantFocusability="blocksDescendants"
+    tools:context="com.codepath.apps.mytwitter.DetailsActivity"
     android:background="#FFFFFF">
 
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:adjustViewBounds="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:id="@+id/ivProfileImage"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="openProfile"/>
+        android:onClick="openProfile"
+        android:padding="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,8 +25,9 @@
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:paddingRight="5dp"
-        android:paddingLeft="5dp"
-        android:textColor="#111111"/>
+        android:paddingLeft="2dp"
+        android:paddingTop="12dp"
+        android:textColor="#111111" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,12 +35,10 @@
         android:text="Text Body"
         android:id="@+id/tvBody"
         android:paddingRight="5dp"
-        android:paddingLeft="5dp"
-        android:layout_below="@+id/tvUsername"
-        android:layout_alignLeft="@+id/tvUsername"
-        android:layout_alignStart="@+id/tvUsername"
-        android:linksClickable="true"
-        android:autoLink="all"/>
+        android:paddingLeft="8dp"
+        android:layout_below="@+id/ivProfileImage"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,19 +46,19 @@
         android:text="Time"
         android:id="@+id/tvTime"
         android:paddingRight="5dp"
-        android:paddingLeft="5dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:paddingLeft="8dp"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="14dp"
         android:layout_height="15dp"
         android:id="@+id/btnReply"
-        android:layout_below="@+id/tvBody"
+        android:layout_below="@+id/tvTime"
         android:layout_alignLeft="@+id/tvBody"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="8dp"
         android:paddingRight="50dp"
         android:paddingTop="8dp"
         android:background="@drawable/replied"/>
@@ -114,9 +113,9 @@
         android:text="Screen Name"
         android:id="@+id/tvScreenName"
         android:paddingRight="5dp"
-        android:paddingLeft="5dp"
-        android:layout_alignTop="@+id/tvUsername"
-        android:layout_toRightOf="@+id/tvUsername"
-        android:layout_toEndOf="@+id/tvUsername" />
+        android:paddingLeft="2dp"
+        android:layout_below="@+id/tvUsername"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_toEndOf="@+id/ivProfileImage" />
 
 </RelativeLayout>
